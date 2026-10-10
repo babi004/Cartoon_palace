@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Welcome to Cartoon Palace, a magical universe for cartoon lovers.">
+<title>Cartoon Palace 👑</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #100b24;
+  color: white;
+}
+
+header {
+  text-align: center;
+  padding: 30px 15px;
+  background: linear-gradient(135deg, #7b2ff7, #30105c, #120b2b);
+}
+
+header h1 {
+  font-size: clamp(28px, 6vw, 42px);
+  margin-bottom: 10px;
+}
+
+header p {
+  color: #e4d5ff;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 16px 10px;
+  background: #21143f;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #f5caff;
+}
+
+.hero {
+  text-align: center;
+  padding: 55px 15px 35px;
+  background: radial-gradient(ellipse at top, #39205f, #100b24 75%);
+}
+
+.hero h2 {
+  color: #f0caff;
+  font-size: clamp(24px, 5vw, 34px);
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #d7c9f5;
+  line-height: 1.7;
+}
+
+.search {
+  display: block;
+  width: 90%;
+  max-width: 480px;
+  margin: 24px auto 0;
+  padding: 14px 18px;
+  border: 2px solid #8153bd;
+  border-radius: 30px;
+  background: #21143f;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.search::placeholder {
+  color: #c5b4df;
+}
+
+.section-title {
+  text-align: center;
+  padding: 25px 10px 10px;
+  color: #edc7ff;
+  font-size: 27px;
+}
+
+.gallery {
+  padding: 25px 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.card {
+  background: #25183f;
+  border: 1px solid #50316e;
+  border-radius: 16px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #d2a3ff;
+}
+
+.art {
+  height: 145px;
+  display: grid;
+  place-items: center;
+  font-size: 68px;
+  background: linear-gradient(135deg, #51258a, #21143f);
+}
+
+.card h3 {
+  margin: 14px 5px 8px;
+  color: #f1dfff;
+}
+
+.card p {
+  color: #cbbbe3;
+  font-size: 14px;
+  padding: 0 10px 17px;
+  line-height: 1.5;
+}
+
+.empty {
+  display: none;
+  text-align: center;
+  padding: 25px;
+  color: #d7c9f5;
+}
+
+.notice {
+  text-align: center;
+  color: #d7c9f5;
+  padding: 10px 15px 30px;
+}
+
+.about {
+  text-align: center;
+  padding: 40px 20px 55px;
+  background: #19102f;
+}
+
+.about h2 {
+  color: #edc7ff;
+  margin-bottom: 18px;
+}
+
+.about p {
+  max-width: 650px;
+  margin: auto;
+  line-height: 1.8;
+  color: #d7c9f5;
+}
+
+footer {
+  text-align: center;
+  padding: 25px 12px;
+  background: #21143f;
+  color: #d7c9f5;
+  font-size: 14px;
+  line-height: 1.8;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>👑 Cartoon Palace</h1>
+  <p>Where Imagination Rules the Kingdom! ✨</p>
+</header>
+
+<nav>
+  <a href="#home">🏠 Home</a>
+  <a href="#gallery">🎨 Gallery</a>
+  <a href="#about">ℹ️ About</a>
+</nav>
+
+<section class="hero" id="home">
+  <h2>Welcome to Your Cartoon Kingdom! 🏰</h2>
+  <p>
+    Explore a magical world of animation, funny characters,
+    fantasy adventures and endless imagination.
+  </p>
+
+  <input
+    class="search"
+    id="search"
+    type="search"
+    placeholder="🔍 Search cartoon categories..."
+    aria-label="Search cartoon categories"
+    oninput="filterCards()"
+  >
+</section>
+
+<h2 class="section-title" id="gallery">✨ Explore the Palace</h2>
+
+<section class="gallery">
+  <article class="card">
+    <div class="art">🐼</div>
+    <h3>Funny Friends</h3>
+    <p>Comedy, fun and laughter.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🦊</div>
+    <h3>Adventure World</h3>
+    <p>Discover exciting new worlds.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🐸</div>
+    <h3>Crazy Cartoons</h3>
+    <p>Enjoy silly and funny moments.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🐉</div>
+    <h3>Fantasy Kingdom</h3>
+    <p>Magic, mystery and dragons.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🐱</div>
+    <h3>Animated Pals</h3>
+    <p>Meet your favourite characters.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🦄</div>
+    <h3>Dream Land</h3>
+    <p>Imagine the impossible.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🚀</div>
+    <h3>Space Adventures</h3>
+    <p>Travel across the universe.</p>
+  </article>
+
+  <article class="card">
+    <div class="art">🦸</div>
+    <h3>Super Heroes</h3>
+    <p>Meet extraordinary heroes.</p>
+  </article>
+</section>
+
+<p class="empty" id="empty">
+  No matching categories found. Try another search! 🔎
+</p>
+
+<p class="notice">
+  🌟 More cartoon images and videos coming soon! 🌟
+</p>
+
+<section class="about" id="about">
+  <h2>📖 About Cartoon Palace</h2>
+  <p>
+    Cartoon Palace is a magical online destination for cartoon lovers.
+    Explore different cartoon categories, discover animated worlds,
+    and enjoy a colourful experience on your phone, tablet or computer.
+    Our palace is growing, so stay tuned for more exciting content!
+  </p>
+</section>
+
+<footer>
+  <p>👑 © 2026 Cartoon Palace</p>
+  <p>Made with 💜 for cartoon lovers everywhere.</p>
+</footer>
+
+<script>
+function filterCards() {
+  const query = document.getElementById("search")
+    .value.trim().toLowerCase();
+
+  const cards = document.querySelectorAll(".card");
+  let visibleCount = 0;
+
+  cards.forEach(function(card) {
+    const matches = card.innerText.toLowerCase().includes(query);
+
+    card.style.display = matches ? "" : "none";
+
+    if (matches) {
+      visibleCount++;
+    }
+  });
+
+  document.getElementById("empty").style.display =
+    visibleCount === 0 ? "block" : "none";
+}
+</script>
+
+</body>
+</html>

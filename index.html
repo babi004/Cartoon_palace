@@ -1,319 +1,505 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Welcome to Cartoon Palace, a magical universe for cartoon lovers.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100b20">
+<meta name="description" content="Explore cartoon images and videos at Cartoon Palace.">
 <title>Cartoon Palace 👑</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+:root {
+  --bg: #100b20;
+  --panel: #201638;
+  --purple: #a78bfa;
+  --text: #f5f0ff;
 }
-
-html {
-  scroll-behavior: smooth;
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, sans-serif;
-  background: #100b24;
-  color: white;
 }
-
 header {
   text-align: center;
-  padding: 30px 15px;
-  background: linear-gradient(135deg, #7b2ff7, #30105c, #120b2b);
+  padding: 28px 14px;
+  background: linear-gradient(135deg,#32145c,#7138a5);
 }
-
-header h1 {
-  font-size: clamp(28px, 6vw, 42px);
-  margin-bottom: 10px;
-}
-
-header p {
-  color: #e4d5ff;
-}
-
+h1 { margin: 0 0 8px; font-size: 32px; }
+header p { margin: 0; color: #e5d9ff; }
 nav {
   display: flex;
   justify-content: center;
-  gap: 25px;
-  padding: 16px 10px;
-  background: #21143f;
+  gap: 20px;
+  padding: 14px;
   flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  background: #1a112b;
 }
-
-nav a {
-  color: white;
-  text-decoration: none;
+nav a { color: white; text-decoration: none; }
+nav a:hover { color: var(--purple); }
+main { max-width: 1100px; margin: auto; padding: 20px; }
+h2 { color: #c4b5fd; }
+input, button { font: inherit; border-radius: 9px; padding: 12px; }
+input {
+  background: #fff;
+  color: #171020;
+  border: 1px solid #b9a2e8;
+  max-width: 100%;
+}
+button {
+  background: var(--purple);
+  color: #180b2b;
+  border: 0;
   font-weight: bold;
+  cursor: pointer;
 }
-
-nav a:hover {
-  color: #f5caff;
-}
-
-.hero {
-  text-align: center;
-  padding: 55px 15px 35px;
-  background: radial-gradient(ellipse at top, #39205f, #100b24 75%);
-}
-
-.hero h2 {
-  color: #f0caff;
-  font-size: clamp(24px, 5vw, 34px);
-  margin-bottom: 15px;
-}
-
-.hero p {
-  color: #d7c9f5;
-  line-height: 1.7;
-}
-
-.search {
-  display: block;
-  width: 90%;
-  max-width: 480px;
-  margin: 24px auto 0;
-  padding: 14px 18px;
-  border: 2px solid #8153bd;
-  border-radius: 30px;
-  background: #21143f;
-  color: white;
-  font-size: 16px;
-  outline: none;
-}
-
-.search::placeholder {
-  color: #c5b4df;
-}
-
-.section-title {
-  text-align: center;
-  padding: 25px 10px 10px;
-  color: #edc7ff;
-  font-size: 27px;
-}
-
+button:disabled { opacity: .5; cursor: wait; }
+.search { width: 100%; margin: 8px 0 20px; }
 .gallery {
-  padding: 25px 18px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 18px;
-  max-width: 1100px;
-  margin: auto;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 16px;
 }
-
 .card {
-  background: #25183f;
-  border: 1px solid #50316e;
-  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid #493466;
+  border-radius: 14px;
   overflow: hidden;
-  text-align: center;
-  transition: transform 0.2s, border-color 0.2s;
+  min-width: 0;
 }
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #d2a3ff;
+.card img, .card video {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+  background: #090610;
 }
-
-.art {
-  height: 145px;
-  display: grid;
-  place-items: center;
-  font-size: 68px;
-  background: linear-gradient(135deg, #51258a, #21143f);
+.caption { padding: 12px; overflow-wrap: anywhere; }
+.small { font-size: 13px; color: #d4c6ed; }
+.panel {
+  background: var(--panel);
+  border: 1px solid #493466;
+  padding: 16px;
+  border-radius: 14px;
+  margin: 22px 0;
 }
-
-.card h3 {
-  margin: 14px 5px 8px;
-  color: #f1dfff;
+.panel input { display: block; width: 100%; margin: 10px 0; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.status {
+  min-height: 24px;
+  color: #ddd0ff;
+  overflow-wrap: anywhere;
 }
-
-.card p {
-  color: #cbbbe3;
-  font-size: 14px;
-  padding: 0 10px 17px;
-  line-height: 1.5;
-}
-
-.empty {
-  display: none;
-  text-align: center;
-  padding: 25px;
-  color: #d7c9f5;
-}
-
-.notice {
-  text-align: center;
-  color: #d7c9f5;
-  padding: 10px 15px 30px;
-}
-
-.about {
-  text-align: center;
-  padding: 40px 20px 55px;
-  background: #19102f;
-}
-
-.about h2 {
-  color: #edc7ff;
-  margin-bottom: 18px;
-}
-
-.about p {
-  max-width: 650px;
-  margin: auto;
-  line-height: 1.8;
-  color: #d7c9f5;
-}
-
-footer {
-  text-align: center;
-  padding: 25px 12px;
-  background: #21143f;
-  color: #d7c9f5;
-  font-size: 14px;
-  line-height: 1.8;
-}
+.hidden { display: none !important; }
+footer { text-align: center; padding: 25px; color: #c4b5fd; }
 </style>
 </head>
 
 <body>
-
 <header>
   <h1>👑 Cartoon Palace</h1>
-  <p>Where Imagination Rules the Kingdom! ✨</p>
+  <p>Your magical world of cartoons, images and videos!</p>
 </header>
 
 <nav>
-  <a href="#home">🏠 Home</a>
-  <a href="#gallery">🎨 Gallery</a>
-  <a href="#about">ℹ️ About</a>
+  <a href="#home">Home</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#about">About</a>
+  <a href="#owner">Owner</a>
 </nav>
 
-<section class="hero" id="home">
-  <h2>Welcome to Your Cartoon Kingdom! 🏰</h2>
-  <p>
-    Explore a magical world of animation, funny characters,
-    fantasy adventures and endless imagination.
+<main id="home">
+  <h2>✨ Explore the Gallery</h2>
+  <input id="search" class="search"
+         placeholder="Search images and videos..."
+         aria-label="Search gallery">
+
+  <p id="galleryStatus" class="status" aria-live="polite">
+    Connecting to gallery...
   </p>
+  <section id="gallery" class="gallery"></section>
 
-  <input
-    class="search"
-    id="search"
-    type="search"
-    placeholder="🔍 Search cartoon categories..."
-    aria-label="Search cartoon categories"
-    oninput="filterCards()"
-  >
-</section>
+  <section id="about" class="panel">
+    <h2>About Cartoon Palace</h2>
+    <p>Discover and enjoy cartoon images and videos in one magical place.</p>
+  </section>
 
-<h2 class="section-title" id="gallery">✨ Explore the Palace</h2>
+  <section id="owner" class="panel">
+    <h2>🔐 Owner Panel</h2>
+    <p class="small">
+      Sign in using the owner email and password created in Supabase Authentication.
+    </p>
 
-<section class="gallery">
-  <article class="card">
-    <div class="art">🐼</div>
-    <h3>Funny Friends</h3>
-    <p>Comedy, fun and laughter.</p>
-  </article>
+    <form id="loginForm">
+      <input id="email" type="email" autocomplete="username"
+             placeholder="Owner email" required>
+      <input id="password" type="password"
+             autocomplete="current-password"
+             placeholder="Owner password" required>
+      <button id="loginBtn" type="submit">Sign In</button>
+    </form>
 
-  <article class="card">
-    <div class="art">🦊</div>
-    <h3>Adventure World</h3>
-    <p>Discover exciting new worlds.</p>
-  </article>
+    <div id="ownerPanel" class="hidden">
+      <p>Signed in as owner.</p>
+      <label for="mediaFile">Choose an image or video (maximum 50 MB)</label>
+      <input id="mediaFile" type="file"
+             accept="image/*,video/mp4,video/webm,video/quicktime">
+      <div class="actions">
+        <button id="uploadBtn" type="button">Upload Media</button>
+        <button id="logoutBtn" type="button">Sign Out</button>
+      </div>
+    </div>
 
-  <article class="card">
-    <div class="art">🐸</div>
-    <h3>Crazy Cartoons</h3>
-    <p>Enjoy silly and funny moments.</p>
-  </article>
+    <p id="ownerStatus" class="status" aria-live="polite"></p>
+  </section>
+</main>
 
-  <article class="card">
-    <div class="art">🐉</div>
-    <h3>Fantasy Kingdom</h3>
-    <p>Magic, mystery and dragons.</p>
-  </article>
-
-  <article class="card">
-    <div class="art">🐱</div>
-    <h3>Animated Pals</h3>
-    <p>Meet your favourite characters.</p>
-  </article>
-
-  <article class="card">
-    <div class="art">🦄</div>
-    <h3>Dream Land</h3>
-    <p>Imagine the impossible.</p>
-  </article>
-
-  <article class="card">
-    <div class="art">🚀</div>
-    <h3>Space Adventures</h3>
-    <p>Travel across the universe.</p>
-  </article>
-
-  <article class="card">
-    <div class="art">🦸</div>
-    <h3>Super Heroes</h3>
-    <p>Meet extraordinary heroes.</p>
-  </article>
-</section>
-
-<p class="empty" id="empty">
-  No matching categories found. Try another search! 🔎
-</p>
-
-<p class="notice">
-  🌟 More cartoon images and videos coming soon! 🌟
-</p>
-
-<section class="about" id="about">
-  <h2>📖 About Cartoon Palace</h2>
-  <p>
-    Cartoon Palace is a magical online destination for cartoon lovers.
-    Explore different cartoon categories, discover animated worlds,
-    and enjoy a colourful experience on your phone, tablet or computer.
-    Our palace is growing, so stay tuned for more exciting content!
-  </p>
-</section>
-
-<footer>
-  <p>👑 © 2026 Cartoon Palace</p>
-  <p>Made with 💜 for cartoon lovers everywhere.</p>
-</footer>
+<footer>© Cartoon Palace</footer>
 
 <script>
-function filterCards() {
-  const query = document.getElementById("search")
-    .value.trim().toLowerCase();
+"use strict";
 
-  const cards = document.querySelectorAll(".card");
-  let visibleCount = 0;
+const SUPABASE_URL =
+  "https://ivamwzytenksaduility.supabase.co";
 
-  cards.forEach(function(card) {
-    const matches = card.innerText.toLowerCase().includes(query);
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2YW13enl0ZW5rc2FkdWlsaXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NTQ1NTUsImV4cCI6MjEwNzIzMDU1NX0.Lkm-y9SXFqfYDUB0gvKvmas-AABeUgy6jTrD4wnP3AM";
 
-    card.style.display = matches ? "" : "none";
+const BUCKET = "cartoon-media";
+const OWNER_UID = "5c17dd41-6d20-44fe-b057-56da5d3d817f";
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
-    if (matches) {
-      visibleCount++;
+const gallery = document.getElementById("gallery");
+const galleryStatus = document.getElementById("galleryStatus");
+const ownerStatus = document.getElementById("ownerStatus");
+const loginForm = document.getElementById("loginForm");
+const ownerPanel = document.getElementById("ownerPanel");
+const searchInput = document.getElementById("search");
+const uploadBtn = document.getElementById("uploadBtn");
+const loginBtn = document.getElementById("loginBtn");
+const mediaInput = document.getElementById("mediaFile");
+
+let db = null;
+let isOwner = false;
+let allFiles = [];
+
+const allowedImage = /\.(png|jpe?g|gif|webp|avif|bmp)$/i;
+const allowedVideo = /\.(mp4|webm|mov|m4v|ogv)$/i;
+
+function setOwnerStatus(message) {
+  ownerStatus.textContent = message;
+}
+
+function safeName(name) {
+  return name.replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
+function isDisplayable(file) {
+  const mime = file.metadata?.mimetype || "";
+  return mime.startsWith("image/") ||
+         mime.startsWith("video/") ||
+         allowedImage.test(file.name) ||
+         allowedVideo.test(file.name);
+}
+
+function showFiles() {
+  const term = searchInput.value.trim().toLowerCase();
+  gallery.replaceChildren();
+
+  const filtered = allFiles.filter(file =>
+    file.name.toLowerCase().includes(term) && isDisplayable(file)
+  );
+
+  if (!filtered.length) {
+    galleryStatus.textContent = term
+      ? "No matching images or videos found."
+      : "No media uploaded yet.";
+    return;
+  }
+
+  galleryStatus.textContent = filtered.length + " media file(s)";
+
+  filtered.forEach(file => {
+    const mime = file.metadata?.mimetype || "";
+    const imageFile = mime.startsWith("image/") ||
+                      allowedImage.test(file.name);
+    const videoFile = mime.startsWith("video/") ||
+                      allowedVideo.test(file.name);
+
+    if (!imageFile && !videoFile) return;
+
+    const { data } = db.storage.from(BUCKET).getPublicUrl(file.name);
+    const url = data.publicUrl;
+
+    const card = document.createElement("article");
+    card.className = "card";
+
+    let media;
+
+    if (imageFile) {
+      media = document.createElement("img");
+      media.alt = file.name;
+      media.loading = "lazy";
+      media.src = url;
+    } else {
+      media = document.createElement("video");
+      media.controls = true;
+      media.preload = "metadata";
+      media.playsInline = true;
+      media.src = url;
     }
+
+    media.addEventListener("error", () => {
+      media.alt = "Unable to load " + file.name;
+    });
+
+    const caption = document.createElement("div");
+    caption.className = "caption";
+
+    const name = document.createElement("div");
+    name.textContent = file.name;
+    caption.appendChild(name);
+
+    if (isOwner) {
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.textContent = "Delete";
+      del.addEventListener("click", () => deleteFile(file.name, del));
+
+      actions.appendChild(del);
+      caption.appendChild(actions);
+    }
+
+    card.append(media, caption);
+    gallery.appendChild(card);
+  });
+}
+
+async function loadFiles() {
+  galleryStatus.textContent = "Loading gallery...";
+
+  const { data, error } = await db.storage.from(BUCKET).list("", {
+    limit: 100,
+    sortBy: { column: "created_at", order: "desc" }
   });
 
-  document.getElementById("empty").style.display =
-    visibleCount === 0 ? "block" : "none";
-}
-</script>
+  if (error) {
+    allFiles = [];
+    gallery.replaceChildren();
+    galleryStatus.textContent =
+      "Gallery error: " + error.message;
+    return;
+  }
 
+  allFiles = (data || []).filter(file =>
+    file.name && isDisplayable(file)
+  );
+
+  showFiles();
+}
+
+async function refreshSession() {
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    setOwnerStatus("Could not check sign-in status: " + error.message);
+    return;
+  }
+
+  const user = data.session?.user;
+  isOwner = !!user && user.id === OWNER_UID;
+
+  loginForm.classList.toggle("hidden", isOwner);
+  ownerPanel.classList.toggle("hidden", !isOwner);
+
+  if (user && !isOwner) {
+    setOwnerStatus("This account is not the designated owner.");
+  } else if (!user) {
+    setOwnerStatus("");
+  } else {
+    setOwnerStatus("Owner signed in successfully.");
+  }
+
+  showFiles();
+}
+
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!db) {
+    setOwnerStatus("Supabase is not connected.");
+    return;
+  }
+
+  loginBtn.disabled = true;
+  setOwnerStatus("Signing in...");
+
+  const email = document.getElementById("email").value.trim();
+  const passwordInput = document.getElementById("password");
+  const password = passwordInput.value;
+
+  try {
+    const { error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    passwordInput.value = "";
+
+    if (error) {
+      setOwnerStatus("Sign-in failed: " + error.message);
+      return;
+    }
+
+    await refreshSession();
+  } catch (error) {
+    setOwnerStatus("Sign-in error: " + error.message);
+  } finally {
+    loginBtn.disabled = false;
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    setOwnerStatus("Sign-out failed: " + error.message);
+    return;
+  }
+
+  isOwner = false;
+  await refreshSession();
+  setOwnerStatus("Signed out.");
+});
+
+uploadBtn.addEventListener("click", async () => {
+  if (!isOwner) {
+    setOwnerStatus("Please sign in with the owner account.");
+    return;
+  }
+
+  const file = mediaInput.files[0];
+
+  if (!file) {
+    setOwnerStatus("Please choose an image or video first.");
+    return;
+  }
+
+  const validImage = file.type.startsWith("image/");
+  const validVideo = file.type.startsWith("video/") &&
+    (allowedVideo.test(file.name));
+
+  if (!validImage && !validVideo) {
+    setOwnerStatus("Choose a supported image or video file.");
+    return;
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    setOwnerStatus("This file exceeds the 50 MB limit.");
+    return;
+  }
+
+  uploadBtn.disabled = true;
+  setOwnerStatus("Uploading...");
+
+  try {
+    const path = Date.now() + "-" + safeName(file.name);
+
+    const { error } = await db.storage.from(BUCKET).upload(path, file, {
+      contentType: file.type,
+      upsert: false
+    });
+
+    if (error) {
+      setOwnerStatus("Upload failed: " + error.message);
+      return;
+    }
+
+    mediaInput.value = "";
+    setOwnerStatus("Upload successful!");
+    await loadFiles();
+  } catch (error) {
+    setOwnerStatus("Upload error: " + error.message);
+  } finally {
+    uploadBtn.disabled = false;
+  }
+});
+
+async function deleteFile(name, button) {
+  if (!isOwner) {
+    setOwnerStatus("Only the owner can delete files.");
+    return;
+  }
+
+  if (!confirm("Delete this media file?")) return;
+
+  button.disabled = true;
+  setOwnerStatus("Deleting...");
+
+  try {
+    const { error } = await db.storage.from(BUCKET).remove([name]);
+
+    if (error) {
+      setOwnerStatus("Delete failed: " + error.message);
+      return;
+    }
+
+    setOwnerStatus("File deleted.");
+    await loadFiles();
+  } catch (error) {
+    setOwnerStatus("Delete error: " + error.message);
+  } finally {
+    button.disabled = false;
+  }
+}
+
+searchInput.addEventListener("input", showFiles);
+
+async function start() {
+  if (!window.supabase) {
+    galleryStatus.textContent =
+      "Supabase library failed to load. Check your internet connection.";
+    return;
+  }
+
+  if (!SUPABASE_ANON_KEY ||
+      SUPABASE_ANON_KEY === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2YW13enl0ZW5rc2FkdWlsaXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NTQ1NTUsImV4cCI6MjEwNzIzMDU1NX0.Lkm-y9SXFqfYDUB0gvKvmas-AABeUgy6jTrD4wnP3AM") {
+    galleryStatus.textContent =
+      "Setup needed: paste your Supabase anon public key into index.html.";
+    return;
+  }
+
+  try {
+    db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    await loadFiles();
+    await refreshSession();
+
+    db.auth.onAuthStateChange(() => {
+      setTimeout(() => {
+        refreshSession().catch(error => {
+          setOwnerStatus("Session error: " + error.message);
+        });
+      }, 0);
+    });
+  } catch (error) {
+    galleryStatus.textContent =
+      "Connection error: " + error.message;
+  }
+}
+
+start();
+</script>
 </body>
 </html>

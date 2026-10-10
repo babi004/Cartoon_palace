@@ -470,11 +470,11 @@ async function start() {
     return;
   }
 
-  if (!SUPABASE_ANON_KEY ||
-      SUPABASE_ANON_KEY === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2YW13enl0ZW5rc2FkdWlsaXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NTQ1NTUsImV4cCI6MjEwNzIzMDU1NX0.Lkm-y9SXFqfYDUB0gvKvmas-AABeUgy6jTrD4wnP3AM") {
-    galleryStatus.textContent =
-      "Setup needed: paste your Supabase anon public key into index.html.";
-    return;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  galleryStatus.textContent =
+    "Setup needed: check your Supabase URL and anon public key.";
+  return;
+  }
   }
 
   try {
